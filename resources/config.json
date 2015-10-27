@@ -1,0 +1,14 @@
+{
+  "_comment_strategy": "Method of search. Can be dfs (depth first search), dsws (double-side width search)",
+  "strategy": "dsws",
+  "startdata" : [
+    [6,0,8],
+    [5,2,1],
+    [4,3,7]
+  ],
+  "enddata" : [
+    [1,2,3],
+    [8,0,4],
+    [7,6,5]
+  ]
+}
