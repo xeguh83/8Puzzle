@@ -1,8 +1,7 @@
 package com.company;
 
-        import com.company.logic.*;
-
-        import java.util.List;
+import com.company.logic.*;
+import java.util.LinkedList;
 
 public class Main {
 
@@ -28,7 +27,7 @@ public class Main {
 
         long startTime = System.nanoTime();
         SolutionFinder solutionFinder = new SolutionFinder();
-        List<State> solution = solutionFinder.generalSearch(problem, strategy);
+        LinkedList<State> solution = solutionFinder.generalSearch(problem, strategy);
         if (solution.isEmpty()) {
             long endTime = System.nanoTime();
             long duration = (endTime - startTime);
@@ -39,7 +38,12 @@ public class Main {
             long duration = (endTime - startTime);
             System.out.println("Has solution with " + solution.size() + " steps. It takes " + solutionFinder.getStep() + " steps to find");
             System.out.println("It takes " + (duration / 1000000) + "ms");
-
+            if (solution.peek().equals(problem.getStartState())) {
+                new FileUploader().writeSolutionToFile(solution.iterator());
+            } else {
+                new FileUploader().writeSolutionToFile(solution.descendingIterator());
+            }
+            System.out.println("Solution steps has been written into output.txt");
         }
 
     }
