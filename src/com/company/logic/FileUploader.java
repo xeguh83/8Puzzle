@@ -9,7 +9,8 @@ import java.util.Iterator;
 public class FileUploader {
     public void writeSolutionToFile(Iterator<State> solutionIterator) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("output.txt").getFile());
+        //File file = new File(classLoader.getResource("output.txt").getFile());
+        File file = new File("c:\\work\\output.txt");
 
         PrintWriter printWriter = new PrintWriter(file);
         while (solutionIterator.hasNext()) {

@@ -1,11 +1,13 @@
 package com.company.logic;
 
+import com.company.logic.astardisp.TreeOfStatesForAStarDisplacement;
 import com.company.logic.dfs.TreeOfStatesForDepthSearch;
 import com.company.logic.dsws.TreeOfStatesForDoubleSideWidthSearch;
 
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -21,9 +23,50 @@ public class SolutionFinder {
             return depthFirstSearch(problem);
         } else if (strategy.equalsIgnoreCase("dsws")) {
             return doubleSideWidthSearch(problem);
+        } else if (strategy.equalsIgnoreCase("astardisp")) {
+            return aStarDisplacementSearch(problem);
         } else {
             throw new Exception("No correct strategy found");
         }
+    }
+
+    private LinkedList<State> aStarDisplacementSearch(Problem problem) {
+        TreeOfStatesForAStarDisplacement tree = new TreeOfStatesForAStarDisplacement(problem.getStartState());
+        while (tree.getList().size() != 0) {
+            List<State> listToWatch = tree.getList();
+            step++;
+            int bestChoiceIndex = -1;
+            int minDisplacement = Integer.MAX_VALUE;
+            for (int i = 0; i < listToWatch.size(); i++) {
+                if (listToWatch.get(i).equals(problem.getEndState())) {
+                    return createSolutionList(listToWatch.get(i));
+                }
+                int currentDispCount = displacementCount(listToWatch.get(i));
+                if (currentDispCount < minDisplacement) {
+                    minDisplacement = currentDispCount;
+                    bestChoiceIndex = i;
+                }
+            }
+            State bestChoiceState = listToWatch.get(bestChoiceIndex);
+            listToWatch.clear();
+            tree.addChildrenToList(bestChoiceState);
+        }
+        return null;
+    }
+
+    private int displacementCount(State state) {
+        //TODO Реализовать подсчет количества чисел не на своих позициях
+        return 0;
+    }
+
+    private LinkedList<State> createSolutionList(State state) {
+        LinkedList<State> solutionList = new LinkedList<>();
+        solutionList.push(state);
+        while (state.getParent() != null) {
+            state = state.getParent();
+            solutionList.push(state);
+        }
+        return solutionList;
     }
 
     private LinkedList<State> depthFirstSearch(Problem problem) {

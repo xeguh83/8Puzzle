@@ -20,9 +20,9 @@ public class JSONLoader {
     public JSONLoader() throws IOException, ParseException {
 
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("config.json").getFile());
+      //File file = new File(classLoader.getResource("config.json").getFile());
 
-        //File file = new File("c:\\work\\config.json");
+        File file = new File("c:\\work\\config.json");
 
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(new FileReader(file));
