@@ -10,15 +10,36 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /**
- * Created by íàïðèìåð Àíäðåé on 07.10.2015.
+ * Класс-холдер для коллеции содержащей пройденные узлы и
+ * коллекции узлов ожидающих раскрытия
+ * Created by aturkin on 08.11.2015.
  */
 public class TreeOfStatesForDoubleSideWidthSearch {
-
+    /**
+     * Коллекция пройденных узлов от начала
+     */
     private Set<State> watchedStartTree;
+
+    /**
+     * Коллекция пройденных узлов с конца
+     */
     private Set<State> watchedEndTree;
+
+    /**
+     * Очередь узлов ожидающих раскрытия от начала
+     */
     private LinkedList<State> startQueue;
+
+    /**
+     * Очередь узлов ожидающих раскрытия с конца
+     */
     private LinkedList<State> endQueue;
 
+    /**
+     * Конструктор
+     * @param rootState корневой узел дерева поиска
+     * @param endState целевой узел состояния дерева поиска
+     */
     public TreeOfStatesForDoubleSideWidthSearch(State rootState, State endState) {
         watchedStartTree = new HashSet<>();
         watchedStartTree.add(rootState);
@@ -44,18 +65,32 @@ public class TreeOfStatesForDoubleSideWidthSearch {
         return endQueue;
     }
 
+    /**
+     * Добаляет дочерние узлы текущего узла в очередь начала
+     * @param state текущий узел
+     */
     public void addChildrenToStartQueue(State state){
         addChildrenToQueue(state, startQueue, watchedStartTree);
     }
 
+    /**
+     * Добаляет дочерние узлы текущего узла в очередь конца
+     * @param state текущий узел
+     */
     public void addChildrenToEndQueue(State state) {
         addChildrenToQueue(state, endQueue, watchedEndTree);
     }
 
+    /**
+     * Общий метод добавления дочерних узлов текущего узла в указанную очередь
+     * @param state текущий узел
+     * @param queue указанная очередь
+     * @param tree класс-холдер дерева поиска
+     */
     private void addChildrenToQueue(State state, LinkedList<State> queue, Set<State> tree) {
         Coordinates zero = state.getZero();
 
-        // Åñëè òî÷êà íå êðàéíÿÿ ëåâàÿ òî äîñòóïíû ïåðåìåùåíèÿ íàëåâî
+        // Если пустая клетка не крайняя левая то доступно перемещение влево
         if (zero.getI() > 0) {
             State stateAfterLeftSwap = new State(state).swapLeft();
             if (tree.add(stateAfterLeftSwap)) {
@@ -63,7 +98,7 @@ public class TreeOfStatesForDoubleSideWidthSearch {
             }
         }
 
-        // Åñëè òî÷êà íå êðàéíÿÿ ïðàâàÿ òî äîñòóïíû ïåðåìåùàåíèÿ íàïðàâî
+        // Если пустая клетка не крайняя правая то доступно перемещение вправо
         if (zero.getI() < (Global.MATRIX_SIZE - 1)) {
             State stateAfterRightSwap = new State(state).swapRight();
             if (tree.add(stateAfterRightSwap)) {
@@ -71,7 +106,7 @@ public class TreeOfStatesForDoubleSideWidthSearch {
             }
         }
 
-        // Åñëè òî÷êà íå êðàéíÿÿ íèæíÿÿ òî äîñòóïíû ïåðåìåùåíèÿ âíèç
+        // Если пустая клетка не крайняя нижняя то доступно перемещение вниз
         if (zero.getJ() < (Global.MATRIX_SIZE - 1)) {
             State stateAfterDownSwap = new State(state).swapDown();
             if (tree.add(stateAfterDownSwap)) {
@@ -79,7 +114,7 @@ public class TreeOfStatesForDoubleSideWidthSearch {
             }
         }
 
-        // Åñëè òî÷êà íå êðàéíÿÿ âåðõíÿÿ òî äîñòóïíû ïåðåìåùåíèÿ ââåðõ
+        // Если пустая клетка не крайняя верхняя то доступно перемещение вверх
         if (zero.getJ() > 0) {
             State stateAfterUpSwap = new State(state).swapUp();
             if (tree.add(stateAfterUpSwap)) {

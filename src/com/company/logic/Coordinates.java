@@ -1,23 +1,38 @@
 package com.company.logic;
 
 /**
- * Created by например Андрей on 04.10.2015.
+ * Java-Bean описывающий координаты ячейки в матрице
+ * Created by aturkin on 04.10.2015.
  */
 public class Coordinates {
 
     private int i;
     private int j;
 
+    /**
+     * Конструктор копирования (создает новый объект типа Coordinates с теми же полями)
+     * @param anotherCoordinates объект типа Coordinates для создания клона
+     */
     public Coordinates(Coordinates anotherCoordinates) {
         this.i = anotherCoordinates.getI();
         this.j = anotherCoordinates.getJ();
     }
 
+    /**
+     * Конструктор по заданым координатам
+     * @param xCoordinate x координата
+     * @param yCoordinate y координата
+     */
     public Coordinates(final int xCoordinate,final int yCoordinate) {
         this.i = xCoordinate;
         this.j = yCoordinate;
     }
 
+    /**
+     * Конструктор по матрице целых чисел. Создает объект Coordinates по координатам 0 в матрице
+     * @param data матрица целых чисел
+     * @throws NumberFormatException если в матрице нет 0
+     */
     public Coordinates(final int[][] data) throws NumberFormatException {
         for (int j = 0; j < data.length; j++) {
             for (int i = 0; i < data[j].length; i++) {

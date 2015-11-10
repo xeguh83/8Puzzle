@@ -12,12 +12,20 @@ import java.util.Set;
 
 
 /**
- * Created by �������� ������ on 04.10.2015.
+ * Класс осуществляющий поиск по выбранной стратегии
+ * Created by aturkin on 04.10.2015.
  */
 public class SolutionFinder {
 
     private long step = 0;
 
+    /**
+     * Перенаправляет исполнение на алгоритм по выбранной стратегии
+     * @param problem проблематика (начальное и конечное состояние)
+     * @param strategy строковое представление стратегии
+     * @return список состояний составляющих решение проблемы
+     * @throws Exception при ошибке указания стратегии
+     */
     public LinkedList<State> generalSearch(Problem problem, String strategy) throws Exception {
         if (strategy.equalsIgnoreCase("dfs")) {
             return depthFirstSearch(problem);
@@ -32,6 +40,11 @@ public class SolutionFinder {
         }
     }
 
+    /**
+     * Поиск решение методом А* с оценкой манхеттоновских расстояний
+     * @param problem проблематика (начальное и конечное состояние)
+     * @return список состояний составляющих решение проблемы
+     */
     private LinkedList<State> aStarManhettenSearch(Problem problem) {
         TreeOfStatesForAStarDisplacement tree = new TreeOfStatesForAStarDisplacement(problem.getStartState());
         while (tree.getListToWatch().size() != 0) {
@@ -56,6 +69,12 @@ public class SolutionFinder {
         return new LinkedList<>();
     }
 
+    /**
+     * Оценивает стоимость по манхеттоновскому расстоянию
+     * @param state текущее состояние
+     * @param problem проблематика (начальное и конечное состояние)
+     * @return стоимость пути по манхеттоновскому расстоянию
+     */
     private int getManhettenCost(State state, Problem problem) {
         int dispCount = 0;
         int[][] currentStateData = state.getData();
@@ -70,6 +89,14 @@ public class SolutionFinder {
         return dispCount + getPassedWay(state);
     }
 
+    /**
+     * Расчет манхеттоновского расстояния
+     * @param state текущее состояние
+     * @param problem проблематика (начальное и конечное состояние)
+     * @param i координата
+     * @param j координата
+     * @return стоимость манхеттоновского состояния
+     */
     private int manhettenPrise(State state, Problem problem, int i, int j) {
         for (int k = 0; k < problem.getEndState().getData().length; k++) {
             for (int l = 0; l < problem.getEndState().getData()[k].length; l++) {
@@ -81,6 +108,11 @@ public class SolutionFinder {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * Поиск решения методом А* по несоответствию значения клеток
+     * @param problem проблематика (начальное и конечное состояние)
+     * @return список состояний составляющих решение проблемы
+     */
     private LinkedList<State> aStarDisplacementSearch(Problem problem) {
         TreeOfStatesForAStarDisplacement tree = new TreeOfStatesForAStarDisplacement(problem.getStartState());
         while (tree.getListToWatch().size() != 0) {
@@ -105,6 +137,12 @@ public class SolutionFinder {
         return new LinkedList<>();
     }
 
+    /**
+     * Определение цены состояния
+     * @param state текущее состояние
+     * @param problem проблематика (начальное и конечное состояние)
+     * @return стоимость несоответствия состояния
+     */
     private int getCost(State state, Problem problem) {
         int dispCount = 0;
         int[][] currentStateData = state.getData();
@@ -119,6 +157,11 @@ public class SolutionFinder {
         return dispCount + getPassedWay(state);
     }
 
+    /**
+     * Определение пройденного состояния из текущего
+     * @param state текущее состояние
+     * @return пройденный путь
+     */
     private int getPassedWay(State state) {
         int passedWay = 0;
         while (state.getParent() != null) {
@@ -128,6 +171,11 @@ public class SolutionFinder {
         return passedWay;
     }
 
+    /**
+     * Создание списка состояний составляющих решение проблемы
+     * @param state состояние
+     * @return список состояний решения
+     */
     private LinkedList<State> createSolutionList(State state) {
         LinkedList<State> solutionList = new LinkedList<>();
         solutionList.push(state);
@@ -138,6 +186,11 @@ public class SolutionFinder {
         return solutionList;
     }
 
+    /**
+     * Поиск решения методом поиска в глубину
+     * @param problem проблематика (начальное и конечное состояние)
+     * @return список состояний составляющих решение проблемы
+     */
     private LinkedList<State> depthFirstSearch(Problem problem) {
         TreeOfStatesForDepthSearch tree = new TreeOfStatesForDepthSearch(problem.getStartState());
         while (tree.getStackToWatch().size() != 0) {
@@ -157,6 +210,11 @@ public class SolutionFinder {
         return new LinkedList<State>();
     }
 
+    /**
+     * Поиск решения методом двустороннего поиска в ширину
+     * @param problem проблематика (начальное и конечное состояние)
+     * @return список состояний составляющих решение проблемы
+     */
     private LinkedList<State> doubleSideWidthSearch(Problem problem) {
         TreeOfStatesForDoubleSideWidthSearch tree = new TreeOfStatesForDoubleSideWidthSearch(problem.getStartState(), problem.getEndState());
         while ((tree.getStartQueue().size() != 0) || (tree.getEndQueue().size() != 0)) {
@@ -179,6 +237,13 @@ public class SolutionFinder {
         return new LinkedList<State>();
     }
 
+    /**
+     * Создание списка-решения для двустороннего поиска
+     * @param crossedState состояние пересечения начального и конечного деревьев
+     * @param problem проблематика (начальное и конечное состояние)
+     * @param tree класс-холдер дерева
+     * @return список состояний составляющих решение проблемы
+     */
     private LinkedList<State> getSolutionList(State crossedState, Problem problem, TreeOfStatesForDoubleSideWidthSearch tree) {
 
         if (problem.getStartState().equals(problem.getEndState())) {
@@ -203,6 +268,12 @@ public class SolutionFinder {
         }
     }
 
+    /**
+     * Создание склеиного списка решения для двустороннего поиска в ширину
+     * @param solutionList половина списка решения
+     * @param tree класс-холдер дерева
+     * @return * @return список состояний составляющих решение проблемы
+     */
     private LinkedList<State> getConcatenatedSolution(LinkedList<State> solutionList, Set<State> tree) {
         State state = getEqualNodeInCollection(solutionList.getLast(), tree);
         while (state.getParent() != null) {
@@ -213,6 +284,12 @@ public class SolutionFinder {
     }
 
 
+    /**
+     * Поиск аналогичного состояния по дереву состояний
+     * @param crossedState состояние для поиска аналога
+     * @param watchedTree дерево для поиска
+     * @return состояние аналогичное переданному
+     */
     private State getEqualNodeInCollection(State crossedState, Set<State> watchedTree) {
         Iterator<State> iterator = watchedTree.iterator();
         while (iterator.hasNext()) {

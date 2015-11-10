@@ -26,6 +26,10 @@ public class TreeOfStatesForDepthSearch {
      */
     private LinkedList<State> stackToWatch;
 
+    /**
+     * Конструктор
+     * @param rootState корневой узел дерева
+     */
     public TreeOfStatesForDepthSearch(State rootState) {
         watchedTree = new HashSet<>();
         watchedTree.add(rootState);
@@ -34,18 +38,25 @@ public class TreeOfStatesForDepthSearch {
         stackToWatch.push(rootState);
     }
 
-    public Set<State> getWatchedTree() {
-        return watchedTree;
-    }
-
+    /**
+     * Геттер коллекции ожидающей просмотра
+     * @return
+     */
     public LinkedList<State> getStackToWatch() {
         return stackToWatch;
     }
 
+    /**
+     * Добавляет дочерние узлы в коллекцию узлов ожидающих просмотра.
+     * Дочерние узлы - это все возможные состояния после перехода из переданного.
+     * Узлы добавляются в коллекцию ожидающих только в том случае, если их еще нет
+     * в коллекции просмотренных узлов.
+     * @param state переданное состояние (узел) для порождение дочерних
+     */
     public void addChildrenToStack(State state) {
         Coordinates zero = state.getZero();
 
-        // Åñëè òî÷êà íå êðàéíÿÿ ëåâàÿ òî äîñòóïíû ïåðåìåùåíèÿ íàëåâî
+        // Если пустая клетка не крайняя левая то доступно перемещение влево
         if (zero.getI() > 0) {
             State stateAfterLeftSwap = new State(state).swapLeft();
             if (watchedTree.add(stateAfterLeftSwap)) {
@@ -53,7 +64,7 @@ public class TreeOfStatesForDepthSearch {
             }
         }
 
-        // Åñëè òî÷êà íå êðàéíÿÿ ïðàâàÿ òî äîñòóïíû ïåðåìåùàåíèÿ íàïðàâî
+        // Если пустая клетка не крайняя правая то доступно перемещение вправо
         if (zero.getI() < (Global.MATRIX_SIZE - 1)) {
             State stateAfterRightSwap = new State(state).swapRight();
             if (watchedTree.add(stateAfterRightSwap)) {
@@ -61,7 +72,7 @@ public class TreeOfStatesForDepthSearch {
             }
         }
 
-        // Åñëè òî÷êà íå êðàéíÿÿ íèæíÿÿ òî äîñòóïíû ïåðåìåùåíèÿ âíèç
+        // Если пустая клетка не крайняя нижняя то доступно перемещение вниз
         if (zero.getJ() < (Global.MATRIX_SIZE - 1)) {
             State stateAfterDownSwap = new State(state).swapDown();
             if (watchedTree.add(stateAfterDownSwap)) {
@@ -69,7 +80,7 @@ public class TreeOfStatesForDepthSearch {
             }
         }
 
-        // Åñëè òî÷êà íå êðàéíÿÿ âåðõíÿÿ òî äîñòóïíû ïåðåìåùåíèÿ ââåðõ
+        // Если пустая клетка не крайняя верхняя то доступно перемещение вверх
         if (zero.getJ() > 0) {
             State stateAfterUpSwap = new State(state).swapUp();
             if (watchedTree.add(stateAfterUpSwap)) {
