@@ -10,11 +10,20 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /**
- * Created by íàïðèìåð Àíäðåé on 07.10.2015.
+ * Класс-холдер для коллеции содержащей пройденные узлы и
+ * коллекции узлов ожидающих раскрытия
+ * Created by aturkin on 08.11.2015.
  */
 public class TreeOfStatesForDepthSearch {
 
+    /**
+     * Коллекция просмотренных узлов
+     */
     private Set<State> watchedTree;
+
+    /**
+     * Коллекция узлов ожидающих раскрытия
+     */
     private LinkedList<State> stackToWatch;
 
     public TreeOfStatesForDepthSearch(State rootState) {

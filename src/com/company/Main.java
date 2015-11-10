@@ -3,6 +3,10 @@ package com.company;
 import com.company.logic.*;
 import java.util.LinkedList;
 
+/**
+ * Класс запускающий приложение
+ * @author aturkin
+ */
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -18,9 +22,9 @@ public class Main {
 
 
         State endState = new State(endData, new Coordinates(endData));
-//                {1, 2, 3},
-//                {8, 0, 4},
-//                {7, 6, 5}
+        //                {1, 2, 3},
+        //                {8, 0, 4},
+        //                {7, 6, 5}
 
 
         Problem problem = new Problem(startState, endState);

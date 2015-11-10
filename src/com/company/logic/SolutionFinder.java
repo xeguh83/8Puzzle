@@ -1,6 +1,6 @@
 package com.company.logic;
 
-import com.company.logic.astardisp.TreeOfStatesForAStarDisplacement;
+import com.company.logic.astar.TreeOfStatesForAStarDisplacement;
 import com.company.logic.dfs.TreeOfStatesForDepthSearch;
 import com.company.logic.dsws.TreeOfStatesForDoubleSideWidthSearch;
 
@@ -34,8 +34,8 @@ public class SolutionFinder {
 
     private LinkedList<State> aStarManhettenSearch(Problem problem) {
         TreeOfStatesForAStarDisplacement tree = new TreeOfStatesForAStarDisplacement(problem.getStartState());
-        while (tree.getList().size() != 0) {
-            List<State> listToWatch = tree.getList();
+        while (tree.getListToWatch().size() != 0) {
+            List<State> listToWatch = tree.getListToWatch();
             step++;
             int bestChoiceIndex = -1;
             int minCost = Integer.MAX_VALUE;
@@ -83,8 +83,8 @@ public class SolutionFinder {
 
     private LinkedList<State> aStarDisplacementSearch(Problem problem) {
         TreeOfStatesForAStarDisplacement tree = new TreeOfStatesForAStarDisplacement(problem.getStartState());
-        while (tree.getList().size() != 0) {
-            List<State> listToWatch = tree.getList();
+        while (tree.getListToWatch().size() != 0) {
+            List<State> listToWatch = tree.getListToWatch();
             step++;
             int bestChoiceIndex = -1;
             int minCost = Integer.MAX_VALUE;
