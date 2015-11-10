@@ -31,7 +31,7 @@ public class Main {
         if (solution.isEmpty()) {
             long endTime = System.nanoTime();
             long duration = (endTime - startTime);
-            System.out.println("There is no solution for this task");
+            System.out.println("There is no solution for this task. It takes " + solutionFinder.getStep() + " steps to find");
             System.out.println("It takes " + (duration / 1000000) + "ms");
         } else {
             long endTime = System.nanoTime();

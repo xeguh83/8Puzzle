@@ -25,9 +25,60 @@ public class SolutionFinder {
             return doubleSideWidthSearch(problem);
         } else if (strategy.equalsIgnoreCase("astardisp")) {
             return aStarDisplacementSearch(problem);
+        } else if (strategy.equalsIgnoreCase("astarmanh")) {
+            return aStarManhettenSearch(problem);
         } else {
             throw new Exception("No correct strategy found");
         }
+    }
+
+    private LinkedList<State> aStarManhettenSearch(Problem problem) {
+        TreeOfStatesForAStarDisplacement tree = new TreeOfStatesForAStarDisplacement(problem.getStartState());
+        while (tree.getList().size() != 0) {
+            List<State> listToWatch = tree.getList();
+            step++;
+            int bestChoiceIndex = -1;
+            int minCost = Integer.MAX_VALUE;
+            for (int i = 0; i < listToWatch.size(); i++) {
+                if (listToWatch.get(i).equals(problem.getEndState())) {
+                    return createSolutionList(listToWatch.get(i));
+                }
+                int currentCost = getManhettenCost(listToWatch.get(i), problem);
+                if (currentCost < minCost) {
+                    minCost = currentCost;
+                    bestChoiceIndex = i;
+                }
+            }
+            State bestChoiceState = listToWatch.get(bestChoiceIndex);
+            listToWatch.remove(bestChoiceIndex);
+            tree.addChildrenToList(bestChoiceState);
+        }
+        return new LinkedList<>();
+    }
+
+    private int getManhettenCost(State state, Problem problem) {
+        int dispCount = 0;
+        int[][] currentStateData = state.getData();
+        int[][] endStateData = problem.getEndState().getData();
+        for (int i = 0; i < currentStateData.length; i++) {
+            for (int j = 0; j < currentStateData[i].length; j++) {
+                if (currentStateData[i][j] != endStateData[i][j]) {
+                    dispCount = dispCount + manhettenPrise(state, problem, i ,j);
+                }
+            }
+        }
+        return dispCount + getPassedWay(state);
+    }
+
+    private int manhettenPrise(State state, Problem problem, int i, int j) {
+        for (int k = 0; k < problem.getEndState().getData().length; k++) {
+            for (int l = 0; l < problem.getEndState().getData()[k].length; l++) {
+                if (problem.getEndState().getData()[k][l] == state.getData()[i][j]) {
+                    return Math.abs(i - k) + Math.abs(j - l);
+                }
+            }
+        }
+        return Integer.MIN_VALUE;
     }
 
     private LinkedList<State> aStarDisplacementSearch(Problem problem) {
@@ -36,27 +87,45 @@ public class SolutionFinder {
             List<State> listToWatch = tree.getList();
             step++;
             int bestChoiceIndex = -1;
-            int minDisplacement = Integer.MAX_VALUE;
+            int minCost = Integer.MAX_VALUE;
             for (int i = 0; i < listToWatch.size(); i++) {
                 if (listToWatch.get(i).equals(problem.getEndState())) {
                     return createSolutionList(listToWatch.get(i));
                 }
-                int currentDispCount = displacementCount(listToWatch.get(i));
-                if (currentDispCount < minDisplacement) {
-                    minDisplacement = currentDispCount;
+                int currentCost = getCost(listToWatch.get(i), problem);
+                if (currentCost < minCost) {
+                    minCost = currentCost;
                     bestChoiceIndex = i;
                 }
             }
             State bestChoiceState = listToWatch.get(bestChoiceIndex);
-            listToWatch.clear();
+            listToWatch.remove(bestChoiceIndex);
             tree.addChildrenToList(bestChoiceState);
         }
-        return null;
+        return new LinkedList<>();
     }
 
-    private int displacementCount(State state) {
-        //TODO Реализовать подсчет количества чисел не на своих позициях
-        return 0;
+    private int getCost(State state, Problem problem) {
+        int dispCount = 0;
+        int[][] currentStateData = state.getData();
+        int[][] endStateData = problem.getEndState().getData();
+        for (int i = 0; i < currentStateData.length; i++) {
+            for (int j = 0; j < currentStateData[i].length; j++) {
+                if (currentStateData[i][j] != endStateData[i][j]) {
+                    dispCount++;
+                }
+            }
+        }
+        return dispCount + getPassedWay(state);
+    }
+
+    private int getPassedWay(State state) {
+        int passedWay = 0;
+        while (state.getParent() != null) {
+            state = state.getParent();
+            passedWay++;
+        }
+        return passedWay;
     }
 
     private LinkedList<State> createSolutionList(State state) {

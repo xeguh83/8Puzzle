@@ -1,5 +1,5 @@
 {
-  "_comment_strategy": "Method of search. Can be dfs (depth first search), dsws (double-side width search)",
+  "_comment_strategy": "Method of search. Can be dfs (depth first search), dsws (double-side width search), astardisp(a star search displacement), astarmanh(a star search manhetten)",
   "strategy": "dfs",
   "startdata" : [
     [6,0,8],
@@ -7,8 +7,8 @@
     [4,3,7]
   ],
   "enddata" : [
-    [1,2,3],
-    [8,0,4],
-    [7,6,5]
+   [1, 2, 3],
+   [8, 0, 4],
+   [7, 6, 5]
   ]
 }
